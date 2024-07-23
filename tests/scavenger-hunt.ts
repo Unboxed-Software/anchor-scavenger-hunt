@@ -1,5 +1,5 @@
-import * as anchor from "@project-serum/anchor"
-import { Program } from "@project-serum/anchor"
+import * as anchor from "@coral-xyz/anchor"
+import { Program } from "@coral-xyz/anchor"
 import { findProgramAddressSync } from "@project-serum/anchor/dist/cjs/utils/pubkey"
 import { Keypair } from "@solana/web3.js"
 import { assert } from "chai"
@@ -39,7 +39,7 @@ describe("scavenger-hunt", () => {
     // Add your test here.
     const tx = await program.methods
       .checkIn(gameId, location)
-      .accounts({ eventOrganizer: eventOrganizer.publicKey })
+      .accountsPartial({ eventOrganizer: eventOrganizer.publicKey })
       .signers([eventOrganizer])
       .rpc()
 
@@ -52,7 +52,7 @@ describe("scavenger-hunt", () => {
     // Add your test here.
     const tx = await program.methods
       .checkIn(gameId, location)
-      .accounts({ eventOrganizer: eventOrganizer.publicKey })
+      .accountsPartial({ eventOrganizer: eventOrganizer.publicKey })
       .signers([eventOrganizer])
       .rpc()
 

@@ -1,6 +1,6 @@
 use anchor_lang::{prelude::*, solana_program::pubkey};
 
-declare_id!("9gQfxMKfELeAjLmAoriLpkVPSHd7xb36cBfYXDXX27xE");
+declare_id!("Di2e9PAgcwGHdAJF6d5zxEXTj9KdDm8dWpmc6FcMoK1J");
 
 #[constant]
 pub const EVENT_ORGANIZER: Pubkey = pubkey!("fun8eenPrVMJtiQNE7q1iBVDNuY2Lbnc3x8FFgCt43N");
@@ -10,8 +10,13 @@ pub mod scavenger_hunt {
     use super::*;
 
     pub fn initialize(ctx: Context<Initialize>, game_id: Pubkey) -> Result<()> {
-        ctx.accounts.user_state.user = ctx.accounts.user.key();
-        ctx.accounts.user_state.game_id = game_id;
+        ctx.accounts.user_state.set_inner(UserState {
+            user: *ctx.accounts.user.key,
+            game_id,
+            last_location: Pubkey::default(),
+            bump: ctx.bumps.user_state,
+        });
+
         Ok(())
     }
 
@@ -29,7 +34,7 @@ pub struct Initialize<'info> {
         seeds = [game_id.key().as_ref(), user.key().as_ref()],
         bump,
         payer = user,
-        space = 8 + 32 + 32 + 32
+        space = 8 + UserState::INIT_SPACE,
 
     )]
     pub user_state: Account<'info, UserState>,
@@ -45,7 +50,7 @@ pub struct CheckIn<'info> {
     #[account(
         mut,
         seeds = [game_id.key().as_ref(), user.key().as_ref()],
-        bump,
+        bump = user_state.bump,
     )]
     pub user_state: Account<'info, UserState>,
     #[account(mut)]
@@ -55,8 +60,10 @@ pub struct CheckIn<'info> {
 }
 
 #[account]
+#[derive(InitSpace)]
 pub struct UserState {
     pub user: Pubkey,
     pub game_id: Pubkey,
     pub last_location: Pubkey,
+    pub bump: u8,
 }
