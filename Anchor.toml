@@ -1,6 +1,10 @@
 [features]
 seeds = true
 skip-lint = false
+
+[programs.localnet]
+scavenger_hunt = "Di2e9PAgcwGHdAJF6d5zxEXTj9KdDm8dWpmc6FcMoK1J"
+
 [programs.devnet]
 scavenger_hunt = "Di2e9PAgcwGHdAJF6d5zxEXTj9KdDm8dWpmc6FcMoK1J"
 
@@ -8,7 +12,7 @@ scavenger_hunt = "Di2e9PAgcwGHdAJF6d5zxEXTj9KdDm8dWpmc6FcMoK1J"
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "devnet"
+cluster = "localnet"
 wallet = "~/.config/solana/id.json"
 
 [scripts]
